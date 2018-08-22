@@ -3,6 +3,8 @@ package server.hawker.com.foodshopserver;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,8 +15,23 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import java.util.List;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
+import server.hawker.com.foodshopserver.Adapter.MenuAdapter;
+import server.hawker.com.foodshopserver.Model.Category;
+import server.hawker.com.foodshopserver.Retrofit.IHawkerAPI;
+import server.hawker.com.foodshopserver.Utils.Common;
+
 public class HomeActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    RecyclerView recycler_menu;
+    CompositeDisposable compositeDisposable = new CompositeDisposable();
+    IHawkerAPI mService;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +57,54 @@ public class HomeActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        //view
+        recycler_menu = (RecyclerView)findViewById(R.id.recycler_menu);
+        recycler_menu.setLayoutManager(new GridLayoutManager(this,2));
+        recycler_menu.setHasFixedSize(true);
+
+        mService = Common.getAPI();
+
+        getMenu();
+    }
+
+    private void getMenu() {
+        compositeDisposable.add(mService.getMenu()
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(new Consumer<List<Category>>() {
+                                @Override
+                                public void accept(List<Category> categories) throws Exception {
+                                        displayMenuList(categories);
+                                }
+                            }));
+    }
+
+    private void displayMenuList(List<Category> categories) {
+
+        MenuAdapter adapter = new MenuAdapter(this,categories);
+        recycler_menu.setAdapter(adapter);
+    }
+
+    //ctrl O
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getMenu();
+    }
+
+    @Override
+    protected void onDestroy() {
+        compositeDisposable.clear();
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStop() {
+        compositeDisposable.clear();
+        super.onStop();
     }
 
     @Override

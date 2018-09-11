@@ -27,4 +27,15 @@ public interface IHawkerAPI {
     @POST("server/category/upload_category_img.php")
     Call<String> uploadCategoryFile(@Part MultipartBody.Part file);
 
+    @FormUrlEncoded
+    @POST("server/category/update_category.php")
+    Observable<String> updateCategory(@Field("id") String id,
+                                   @Field("name") String name,
+                                   @Field("imgPath") String imgPath);
+
+    @FormUrlEncoded
+    @POST("server/category/delete_category.php")
+    Observable<String> deleteCategory(@Field("id") String id);
+
+
 }

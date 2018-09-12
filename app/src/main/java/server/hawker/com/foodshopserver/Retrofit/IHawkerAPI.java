@@ -12,6 +12,7 @@ import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
 import server.hawker.com.foodshopserver.Model.Category;
+import server.hawker.com.foodshopserver.Model.Food;
 
 public interface IHawkerAPI {
 
@@ -36,6 +37,10 @@ public interface IHawkerAPI {
     @FormUrlEncoded
     @POST("server/category/delete_category.php")
     Observable<String> deleteCategory(@Field("id") String id);
+
+    @FormUrlEncoded
+    @POST("getfood.php")
+    Observable<List<Food>>getFood(@Field("menuid")String menuID);
 
 
 }

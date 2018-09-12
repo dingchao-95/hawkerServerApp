@@ -24,7 +24,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".UpdateCategoryActivity"></activity>
+        <activity android:name=".UpdateCategoryActivity" />
+        <activity android:name=".FoodList"></activity>
     </application>
 
 </manifest>

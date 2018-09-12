@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import server.hawker.com.foodshopserver.Adapter.ViewHolder.MenuViewHolder;
+import server.hawker.com.foodshopserver.FoodList;
 import server.hawker.com.foodshopserver.Interface.ItemClickListener;
 import server.hawker.com.foodshopserver.Model.Category;
 import server.hawker.com.foodshopserver.R;
@@ -46,12 +47,23 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuViewHolder>{
 
         //implement item click
         holder.setItemClickListener(new ItemClickListener() {
+
             @Override
-            public void OnClick(View view) {
-                //Assign this category to variable global
-                Common.currentCategory = categoryList.get(position);
-                //start new activity
-                context.startActivity(new Intent(context, UpdateCategoryActivity.class));
+            public void OnClick(View view, boolean isLongClick) {
+                if(isLongClick)
+                {
+                    //Assign this category to variable global
+                    Common.currentCategory = categoryList.get(position);
+                    //start new activity
+                    context.startActivity(new Intent(context, UpdateCategoryActivity.class));
+                }
+                else
+                {
+                    //Assign this category to variable global
+                    Common.currentCategory = categoryList.get(position);
+                    //start new activity
+                    context.startActivity(new Intent(context, FoodList.class));
+                }
             }
         });
     }

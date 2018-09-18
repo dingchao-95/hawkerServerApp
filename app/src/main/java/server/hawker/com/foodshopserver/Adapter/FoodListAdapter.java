@@ -1,6 +1,7 @@
 package server.hawker.com.foodshopserver.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,6 +17,8 @@ import server.hawker.com.foodshopserver.FoodList;
 import server.hawker.com.foodshopserver.Interface.ItemClickListener;
 import server.hawker.com.foodshopserver.Model.Food;
 import server.hawker.com.foodshopserver.R;
+import server.hawker.com.foodshopserver.UpdateProductActivity;
+import server.hawker.com.foodshopserver.Utils.Common;
 
 public class FoodListAdapter extends RecyclerView.Adapter<FoodListViewHolder>{
 
@@ -36,7 +39,7 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FoodListViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull FoodListViewHolder holder, final int position) {
         Picasso.with(context)
                 .load(foodList.get(position).Link)
                 .into(holder.img_product);
@@ -48,7 +51,8 @@ public class FoodListAdapter extends RecyclerView.Adapter<FoodListViewHolder>{
         holder.setItemClickListener(new ItemClickListener() {
             @Override
             public void OnClick(View view, boolean isLongClick) {
-                //implement this later
+                Common.currentFood = foodList.get(position);
+                context.startActivity(new Intent(context, UpdateProductActivity.class));
             }
         });
     }

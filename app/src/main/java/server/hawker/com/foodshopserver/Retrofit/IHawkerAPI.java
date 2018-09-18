@@ -58,4 +58,17 @@ public interface IHawkerAPI {
     @POST("server/product/upload_food_img.php")
     Call<String> uploadFoodFile(@Part MultipartBody.Part file);
 
+
+    @FormUrlEncoded
+    @POST("server/product/update_product.php")
+    Observable<String> updateProduct(@Field("id") String id,
+                                      @Field("name") String name,
+                                      @Field("imgPath") String imgPath,
+                                      @Field("price") String price,
+                                      @Field("menuId") String menuId);
+
+    @FormUrlEncoded
+    @POST("server/product/delete_product.php")
+    Observable<String> deleteProduct(@Field("id") String id);
+
 }

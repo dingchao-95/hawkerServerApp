@@ -7,6 +7,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -80,6 +82,7 @@ public class ShowOrderActivity extends AppCompatActivity {
     }
 
     private void displayOrders(List<Order> orders) {
+        Collections.reverse(orders);
         OrderViewAdapter adapter = new OrderViewAdapter(this,orders);
         recycler_orders.setAdapter(adapter);
     }

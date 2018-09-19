@@ -30,7 +30,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 import com.ipaulpro.afilechooser.utils.FileUtils;
 
 import java.io.File;
@@ -133,20 +136,32 @@ public class HomeActivity extends AppCompatActivity
 
         getMenu();
 
-        updateTokenFirebase();
+        updateTokenServer();
     }
 
-    private void updateTokenFirebase() {
-        mService.updateToken("Server_App_01", FirebaseInstanceId.getInstance().getToken(),"1")
-                .enqueue(new Callback<String>() {
+    private void updateTokenServer() {
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnSuccessListener(new OnSuccessListener<InstanceIdResult>() {
                     @Override
-                    public void onResponse(Call<String> call, Response<String> response) {
-                        Log.d("DEBUG",response.body());
-                    }
+                    public void onSuccess(InstanceIdResult instanceIdResult) {
+                        mService.updateToken("Server_App_01", instanceIdResult.getToken(),"1")
+                                .enqueue(new Callback<String>() {
+                                    @Override
+                                    public void onResponse(Call<String> call, Response<String> response) {
+                                        Log.d("DEBUG",response.body());
+                                    }
 
+                                    @Override
+                                    public void onFailure(Call<String> call, Throwable t) {
+                                        Log.d("DEBUG",t.getMessage());
+                                    }
+                                });
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
                     @Override
-                    public void onFailure(Call<String> call, Throwable t) {
-                        Log.d("DEBUG",t.getMessage());
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(HomeActivity.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

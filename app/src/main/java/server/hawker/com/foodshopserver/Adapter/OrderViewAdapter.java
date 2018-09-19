@@ -1,6 +1,7 @@
 package server.hawker.com.foodshopserver.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import server.hawker.com.foodshopserver.Interface.ItemClickListener;
 import server.hawker.com.foodshopserver.Model.Order;
 import server.hawker.com.foodshopserver.R;
 import server.hawker.com.foodshopserver.Utils.Common;
+import server.hawker.com.foodshopserver.ViewOrderDetail;
 
 public class OrderViewAdapter extends RecyclerView.Adapter<OrderViewHolder>{
 
@@ -33,7 +35,7 @@ public class OrderViewAdapter extends RecyclerView.Adapter<OrderViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull OrderViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull OrderViewHolder holder, final int position) {
         holder.txt_order_id.setText(new StringBuilder("#").append(orderList.get(position).getOrderId()));
         holder.txt_order_price.setText(new StringBuilder("$").append(orderList.get(position).getOrderPrice()));
         holder.txt_order_comment.setText(orderList.get(position).getOrderComment());
@@ -43,6 +45,9 @@ public class OrderViewAdapter extends RecyclerView.Adapter<OrderViewHolder>{
             @Override
             public void OnClick(View view, boolean isLongClick) {
                 //implement it later.
+                Common.currentOrder = orderList.get(position);
+
+                context.startActivity(new Intent(context, ViewOrderDetail.class));
             }
         });
     }

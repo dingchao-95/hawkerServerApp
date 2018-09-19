@@ -5,6 +5,7 @@ import java.util.List;
 
 import server.hawker.com.foodshopserver.Model.Category;
 import server.hawker.com.foodshopserver.Model.Food;
+import server.hawker.com.foodshopserver.Model.Order;
 import server.hawker.com.foodshopserver.Retrofit.IHawkerAPI;
 import server.hawker.com.foodshopserver.Retrofit.RetrofitClient;
 
@@ -14,6 +15,7 @@ public class Common {
 
     public static Category currentCategory;
     public static Food currentFood;
+    public static Order currentOrder;
 
     public static List<Category> menuList = new ArrayList<>();
 

@@ -74,7 +74,7 @@ public interface IHawkerAPI {
 
     //Order Management
     @FormUrlEncoded
-    @POST("server/order/getorder.php")
+    @POST("server/order/getorders.php")
     Observable<List<Order>> getAllOrders(@Field("status") String status);
 
     //Token Management

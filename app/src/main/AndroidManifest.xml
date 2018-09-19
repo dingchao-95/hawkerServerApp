@@ -27,22 +27,20 @@
         <activity android:name=".UpdateCategoryActivity" />
         <activity android:name=".FoodList" />
         <activity android:name=".UpdateProductActivity" />
-        <activity android:name=".ShowOrderActivity"></activity>
+        <activity android:name=".ShowOrderActivity" />
 
-        <service
-            android:name=".Services.MyFirebaseIdService">
+        <service android:name=".Services.MyFirebaseIdService">
             <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
+            </intent-filter>
+        </service>
+        <service android:name=".Services.MyFirebaseMessaging">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
 
-        <service
-            android:name=".Services.MyFirebaseMessaging">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
-            </intent-filter>
-        </service>
-
+        <activity android:name=".ViewOrderDetail"></activity>
     </application>
 
 </manifest>

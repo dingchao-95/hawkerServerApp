@@ -34,6 +34,8 @@ public class ShowOrderActivity extends AppCompatActivity {
 
         mService = Common.getAPI();
 
+        compositeDisposable = new CompositeDisposable();
+
         recycler_orders = (RecyclerView)findViewById(R.id.recycler_orders);
         recycler_orders.setLayoutManager(new LinearLayoutManager(this));
         recycler_orders.setHasFixedSize(true);

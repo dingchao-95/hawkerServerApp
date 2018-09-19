@@ -14,11 +14,22 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import server.hawker.com.foodshopserver.Adapter.OrderDetailAdapter;
+import server.hawker.com.foodshopserver.Model.DataMessage;
+import server.hawker.com.foodshopserver.Model.MyResponse;
+import server.hawker.com.foodshopserver.Model.Order;
+import server.hawker.com.foodshopserver.Model.Token;
+import server.hawker.com.foodshopserver.Retrofit.IFCMServices;
 import server.hawker.com.foodshopserver.Retrofit.IHawkerAPI;
 import server.hawker.com.foodshopserver.Utils.Common;
 
@@ -37,6 +48,7 @@ public class ViewOrderDetail extends AppCompatActivity {
     };
 
     IHawkerAPI mService;
+    IFCMServices mFCMService;
 
     CompositeDisposable compositeDisposable = new CompositeDisposable();
 
@@ -49,6 +61,7 @@ public class ViewOrderDetail extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mService = Common.getAPI();
+        mFCMService = Common.getFCMAPI();
 
         txt_order_id = (TextView)findViewById(R.id.txt_order_id);
         txt_order_price = (TextView)findViewById(R.id.txt_order_price);
@@ -124,7 +137,7 @@ public class ViewOrderDetail extends AppCompatActivity {
     }
 
     private void saveUpdateOrder() {
-        int order_status = spinner_order_status.getSelectedItemPosition()-1;
+        final int order_status = spinner_order_status.getSelectedItemPosition()-1;
         compositeDisposable.add(mService.updateOrderStatus(Common.currentOrder.getUserPhone(),
                 Common.currentOrder.getOrderId(),
                 order_status)
@@ -133,8 +146,7 @@ public class ViewOrderDetail extends AppCompatActivity {
         .subscribe(new Consumer<String>() {
             @Override
             public void accept(String s) throws Exception {
-                Toast.makeText(ViewOrderDetail.this, "Order is updated", Toast.LENGTH_SHORT).show();
-                finish();
+                sendOrderUpdateNotification(Common.currentOrder, order_status);
             }
         }, new Consumer<Throwable>() {
             @Override
@@ -142,6 +154,51 @@ public class ViewOrderDetail extends AppCompatActivity {
                 Log.d("ERROR",throwable.getMessage());
             }
         }));
+
+    }
+
+    private void sendOrderUpdateNotification(final Order currentOrder, final int order_status) {
+
+        //get token
+        mService.getToken(currentOrder.getUserPhone(),"0")
+                .enqueue(new Callback<Token>() {
+                    @Override
+                    public void onResponse(Call<Token> call, Response<Token> response) {
+                        Token userToken = response.body();
+
+                        DataMessage dataMessage = new DataMessage();
+
+                        dataMessage.to = userToken.getToken();
+                        Map<String,String> dataSend = new HashMap<>();
+                        dataSend.put("title","your order has been updated.");
+                        dataSend.put("message","Order #"+currentOrder.getOrderId()+" has been updated to "+Common.convertCodeToStatus(order_status));
+
+                        dataMessage.setData(dataSend);
+
+                        mFCMService.sendNotification(dataMessage)
+                                .enqueue(new Callback<MyResponse>() {
+                                    @Override
+                                    public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                                        if(response.body().success == 1)
+                                        {
+                                            Toast.makeText(ViewOrderDetail.this, "Order is updated", Toast.LENGTH_SHORT).show();
+                                            finish();
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<MyResponse> call, Throwable t) {
+                                        Toast.makeText(ViewOrderDetail.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<Token> call, Throwable t) {
+                        Toast.makeText(ViewOrderDetail.this, ""+t.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
 
     }
 }

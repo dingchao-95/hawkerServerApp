@@ -14,6 +14,7 @@ import retrofit2.http.Part;
 import server.hawker.com.foodshopserver.Model.Category;
 import server.hawker.com.foodshopserver.Model.Food;
 import server.hawker.com.foodshopserver.Model.Order;
+import server.hawker.com.foodshopserver.Model.Token;
 
 public interface IHawkerAPI {
 
@@ -89,6 +90,11 @@ public interface IHawkerAPI {
     Observable<String> updateOrderStatus(@Field("phone") String phone,
                                          @Field("order_id") long orderId,
                                          @Field("status") int status);
+
+    @FormUrlEncoded
+    @POST("gettoken.php")
+    Call<Token> getToken(@Field("phone") String phone,
+                         @Field("isServerToken") String isServerToken);
 
 
 

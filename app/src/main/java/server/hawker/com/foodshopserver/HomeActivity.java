@@ -30,6 +30,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.ipaulpro.afilechooser.utils.FileUtils;
 
 import java.io.File;
@@ -131,6 +132,23 @@ public class HomeActivity extends AppCompatActivity
         mService = Common.getAPI();
 
         getMenu();
+
+        updateTokenFirebase();
+    }
+
+    private void updateTokenFirebase() {
+        mService.updateToken("Server_App_01", FirebaseInstanceId.getInstance().getToken(),"1")
+                .enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(Call<String> call, Response<String> response) {
+                        Log.d("DEBUG",response.body());
+                    }
+
+                    @Override
+                    public void onFailure(Call<String> call, Throwable t) {
+                        Log.d("DEBUG",t.getMessage());
+                    }
+                });
     }
 
     private void showAddCategoryDialog() {
@@ -336,18 +354,9 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_show_order) {
+            // Handle the nav action
+            startActivity(new Intent(HomeActivity.this,ShowOrderActivity.class));
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

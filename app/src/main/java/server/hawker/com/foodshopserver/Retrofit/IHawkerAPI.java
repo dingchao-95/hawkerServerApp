@@ -13,6 +13,7 @@ import retrofit2.http.POST;
 import retrofit2.http.Part;
 import server.hawker.com.foodshopserver.Model.Category;
 import server.hawker.com.foodshopserver.Model.Food;
+import server.hawker.com.foodshopserver.Model.Order;
 
 public interface IHawkerAPI {
 
@@ -70,5 +71,17 @@ public interface IHawkerAPI {
     @FormUrlEncoded
     @POST("server/product/delete_product.php")
     Observable<String> deleteProduct(@Field("id") String id);
+
+    //Order Management
+    @FormUrlEncoded
+    @POST("server/order/getorder.php")
+    Observable<List<Order>> getAllOrders(@Field("status") String status);
+
+    //Token Management
+    @FormUrlEncoded
+    @POST("updatetoken.php")
+    Call<String> updateToken(@Field("phone") String phone,
+                             @Field("token") String token,
+                             @Field("isServerToken") String isServerToken);
 
 }

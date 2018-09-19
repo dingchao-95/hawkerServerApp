@@ -21,4 +21,21 @@ public class Common {
     {
         return RetrofitClient.getClient(BASE_URL).create(IHawkerAPI.class);
     }
+
+    public static String convertCodeToStatus(int orderStatus) {
+        switch (orderStatus)
+        {
+            case 0:
+                return "Placed";
+            case 1:
+                return "Processing";
+            case 2:
+                return "Food is done";
+            case -1:
+                return "Cancelled";
+            default:
+                return "Error in orders.";
+
+        }
+    }
 }

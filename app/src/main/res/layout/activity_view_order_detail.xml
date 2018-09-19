@@ -10,6 +10,20 @@
     android:padding="8dp"
     tools:context=".ViewOrderDetail">
 
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/cardview_dark_background"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
     <android.support.v7.widget.CardView
         android:layout_marginBottom="4dp"
         android:layout_width="match_parent"

@@ -84,4 +84,12 @@ public interface IHawkerAPI {
                              @Field("token") String token,
                              @Field("isServerToken") String isServerToken);
 
+    @FormUrlEncoded
+    @POST("server/order/update_order_status.php")
+    Observable<String> updateOrderStatus(@Field("phone") String phone,
+                                         @Field("order_id") long orderId,
+                                         @Field("status") int status);
+
+
+
 }

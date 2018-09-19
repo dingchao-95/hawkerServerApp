@@ -95,4 +95,10 @@ public class ShowOrderActivity extends AppCompatActivity {
         compositeDisposable.clear();
         super.onStop();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadOrder("0");
+    }
 }
